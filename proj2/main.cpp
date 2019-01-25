@@ -8,16 +8,17 @@
 #include <unistd.h>
 #include <cstdlib>
 
-#define  MODE_STL    0
-#define  MODE_QSORT  1
-#define  MODE_MERGE  2
-#define  MODE_QUICK  3
+#define  MODE_STL       0
+#define  MODE_QSORT     1
+#define  MODE_MERGE     2
+#define  MODE_QUICK     3
+#define  MODE_OBLIVIOUS 4
 
 // Utility functions -----------------------------------------------------------
 
 void usage(int status) {
-    std::cout << "usage: lsort" << std::endl
-              << "    -m MODE   Sorting mode (stl, qsort, merge, quick)" << std::endl
+    std::cout << "usage: volsort" << std::endl
+              << "    -m MODE   Sorting mode (oblivious, stl, qsort, merge, quick)" << std::endl
               << "    -n        Perform numerical ordering"              << std::endl;
     
     exit(status);
@@ -37,6 +38,8 @@ void parse_command_line_options(int argc, char *argv[], int &mode, bool &numeric
                     mode = MODE_MERGE;
                 } else if (strcasecmp(optarg, "quick") == 0) {
                     mode = MODE_QUICK;
+		} else if (strcasecmp(optarg, "oblivious") == 0) {
+		  mode = MODE_OBLIVIOUS;
                 } else {
                     usage(1);
                 }
