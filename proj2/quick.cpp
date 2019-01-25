@@ -6,8 +6,8 @@
 
 // Prototypes
 
-Node *qsort(Node *head, CompareFunction compare);
-void  partition(Node *head, Node *pivot, Node *&left, Node *&right, CompareFunction compare);
+Node *qsort(Node *head, bool numeric);
+void  partition(Node *head, Node *pivot, Node *&left, Node *&right, bool numeric);
 Node *concatenate(Node *left, Node *right);
 
 // Implementations
@@ -15,10 +15,10 @@ Node *concatenate(Node *left, Node *right);
 void quick_sort(List &l, bool numeric) {
 }
 
-Node *qsort(Node *head, CompareFunction compare) {
+Node *qsort(Node *head, bool numeric) {
 }
 
-void partition(Node *head, Node *pivot, Node *&left, Node *&right, CompareFunction compare) {
+void partition(Node *head, Node *pivot, Node *&left, Node *&right, bool numeric) {
 }
 
 Node *concatenate(Node *left, Node *right) {

@@ -22,8 +22,6 @@ struct List {
 };
 
 
-typedef bool(*CompareFunction)(const Node *, const Node*);
-
 // Functions -------------------------------------------------------------------
 
 bool node_number_compare(const Node *a, const Node *b); 	//define in node.cpp, used by quick, merge and stl
