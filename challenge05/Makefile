@@ -10,7 +10,10 @@ solution:	solution.cpp
 clean:
 	rm -f solution
 
-test:		test-output test-memory test-time
+
+.PHONY:		test test-output test-memory clean
+
+test:		test-output test-memory
 
 test-output:	solution
 	@echo Testing output...
