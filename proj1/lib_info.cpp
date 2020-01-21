@@ -40,7 +40,7 @@ string convert(string word) {
 
 }
 
-//this will make all the times into strings to add to file 
+//this will change the seconds back into the min:sec format to print at the end 
 string changeTime(int time) {
    int min, sec;
    ostringstream ss;
