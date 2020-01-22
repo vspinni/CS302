@@ -11,6 +11,8 @@
 
 using namespace std;
 
+
+//Structs for the solution format provided by Dr. Plank.
 struct Song { 
    string title;
    int time;  // could also be a string
@@ -31,7 +33,7 @@ struct Artist {
    int nsongs;
 };
 
-//this will change all underscores to just normal spaces 
+//This will change all underscores to just normal spaces. 
 string convert(string word) {
    for (int i = 0; i < word.size(); i++) {
       if (word[i] == '_') word[i] = ' ';
@@ -40,7 +42,7 @@ string convert(string word) {
 
 }
 
-//this will change the seconds back into the min:sec format to print at the end 
+//This will change the seconds back into the min:sec format to print at the end. 
 string changeTime(int time) {
    int min, sec;
    ostringstream ss;
@@ -55,48 +57,50 @@ string changeTime(int time) {
 
 }
 
+//Main section.
 int main(int argc, char **argv) {
 
    ifstream fs;
    string title, artist, album, genre;
    int track = 0, timeMin = 0, timeSec = 0, totalTime = 0;
-   char trash; //this is to hold the colons for the times because we do not need them 
+   char trash; //This is to hold the colons for the times because we do not need them. 
    Song *ptrSong;
    Artist *ptrArtist;
    Album *ptrAlbum;
+   
    map <string, Artist * > mapArtist;
    map <string, Artist * >::iterator ait;
    map <string, Album * >::iterator ait2;
    map <int, Song * >::iterator sit;
 
-   //this is checking that there are the right amount of agruments 
+   //This is checking that there are the right amount of arguments. 
    if (argc != 2) {
       cerr << "bad file\n";
       return -1;
    }
 
-   //open the file 
+   //Opens the file. 
    fs.open(argv[1]);
 
-   //reads the data from the file 
+   //Reads the data from the file. 
    while (fs >> title >> timeMin >> trash >> timeSec >> artist >> album >> genre >> track) {
 
       timeMin = timeMin * 60;
       totalTime = timeMin + timeSec;
 
-      //removes all the underscores 
+      //Removes all the underscores. 
       title = convert(title);
       artist = convert(artist);
       album = convert(album);
       genre = convert(genre);
 
-      //makes a new case of a song 
+      //Makes a new case of a song. 
       ptrSong = new Song();
       ptrSong->title = title;
       ptrSong->time = totalTime;
       ptrSong->track = track;
 
-      //searchs the artist map to see if the artist already exist
+      //Searchs the artist map to see if the artist already exist.
       ait = mapArtist.find(artist);
       if (ait == mapArtist.end()) {
          ptrArtist = new Artist;
@@ -105,7 +109,7 @@ int main(int argc, char **argv) {
          ptrArtist->nsongs = 1;
          mapArtist.insert(make_pair(artist, ptrArtist));
 
-         //if the artist already exist just update the info 
+	  //If the artist already exist just update the info. 
       }else {
          ptrArtist = ait->second;
          ptrArtist->time += totalTime;
@@ -121,21 +125,55 @@ int main(int argc, char **argv) {
          ptrAlbum->nsongs = 1;
          ptrArtist->albums.insert(make_pair(album, ptrAlbum));
 
-         //if the ablum already exist updates the info         
+	  //If the ablum already exist updates the info.      
       }else {
          ptrAlbum = ait2->second;
          ptrAlbum->time += totalTime;
          ptrAlbum->nsongs++;
       }
 
-      //adds the song to the map 
+      //Adds the song to the map. 
       ptrAlbum->songs.insert(make_pair(track, ptrSong));
 
    }
 
-   //this is where the output needs to format the song titles and everything
-   fs.close();
-   fs.clear();
 
-   return 0;
+	//This is the section where everything is outputted in proper format.
+	//For loop to access the map of artists.
+	for (ait = mapArtist.begin(); ait != mapArtist.end(); ait++){
+	
+		//Temporary variables 1, 2, 3 allow me to save the time from inside the map and then use the changeTime function to put it
+		//back to its proper format.
+		int tmp = ait -> second -> time;
+
+		//Output of artist.
+		cout << ait -> first << ": " << ait -> second -> nsongs << ", " << changeTime(tmp) << endl;
+			
+		//For loop to access the map of albums.
+		for (ait2 = ait -> second -> albums.begin(); ait2 != ait -> second -> albums.end(); ait2++){
+			
+			//Temporary variable for reason above.
+			int tmp2 = ait2 -> second -> time;
+			
+			//Output of albums.
+			cout << "        " << ait2 -> first << ": " << ait2 -> second -> nsongs << ", " << changeTime(tmp2) << endl ;
+		
+			//For loop to access the map of songs.
+			for (sit = ait2 -> second -> songs.begin(); sit != ait2 -> second -> songs.end();sit++){
+				
+				//Temporary variable for reason above.
+				int tmp3 = sit -> second -> time;
+				//Output of songs.
+				cout << "                " << sit -> second -> track << ". " << sit -> second -> title <<  ": " << changeTime(tmp3) << endl;
+
+			}
+		}
+
+	}
+	
+	//Closing the file stream and clearing it.
+	fs.close();
+	fs.clear();
+
+	return 0;
 }
